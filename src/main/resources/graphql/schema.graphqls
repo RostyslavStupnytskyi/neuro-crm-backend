@@ -1,0 +1,22 @@
+type Account {
+    id: ID!
+    name: String!
+    industry: String
+    size: Int
+    billingAddress: String
+}
+
+type Query {
+    accounts: [Account]
+}
+
+input AccountInput {
+    name: String!
+    industry: String
+    size: Int
+    billingAddress: String
+}
+
+type Mutation {
+    createAccount(input: AccountInput!): Account
+}

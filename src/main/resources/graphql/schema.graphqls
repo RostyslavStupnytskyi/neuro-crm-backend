@@ -1,0 +1,49 @@
+type Account {
+    id: ID!
+    name: String!
+    industry: String
+    size: Int
+    billingAddress: String
+}
+
+type Query {
+    accounts: [Account]
+}
+
+input AccountInput {
+    name: String!
+    industry: String
+    size: Int
+    billingAddress: String
+}
+
+type Mutation {
+    createAccount(input: AccountInput!): Account
+}
+
+type Contact {
+    id: ID!
+    accountId: ID
+    firstName: String
+    lastName: String
+    email: String
+    phone: String
+    position: String
+}
+
+extend type Query {
+    contacts: [Contact]
+}
+
+input ContactInput {
+    accountId: ID
+    firstName: String
+    lastName: String
+    email: String
+    phone: String
+    position: String
+}
+
+extend type Mutation {
+    createContact(input: ContactInput!): Contact
+}

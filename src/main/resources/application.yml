@@ -7,12 +7,16 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        format_sql: true
+    show-sql: false
   flyway:
     locations: classpath:db/migration
-  graphql:
-    path: /graphql
-    graphiql:
-      enabled: true
   profiles:
     active: dev
 

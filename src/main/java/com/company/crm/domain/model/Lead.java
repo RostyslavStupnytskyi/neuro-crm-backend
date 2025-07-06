@@ -1,5 +1,6 @@
 package com.company.crm.domain.model;
 
+import com.company.crm.config.JsonConverter;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,7 +17,8 @@ public class Lead {
     private LeadStatus status = LeadStatus.NEW;
 
     @Column(columnDefinition = "jsonb")
-    private String contactData;
+    @Convert(converter = JsonConverter.class)
+    private Object contactData;
 
     public Long getId() {
         return id;
@@ -42,11 +44,11 @@ public class Lead {
         this.status = status;
     }
 
-    public String getContactData() {
+    public Object getContactData() {
         return contactData;
     }
 
-    public void setContactData(String contactData) {
+    public void setContactData(Object contactData) {
         this.contactData = contactData;
     }
 }

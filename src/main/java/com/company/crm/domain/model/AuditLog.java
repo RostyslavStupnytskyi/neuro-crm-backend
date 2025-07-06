@@ -1,5 +1,6 @@
 package com.company.crm.domain.model;
 
+import com.company.crm.config.JsonConverter;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -17,7 +18,8 @@ public class AuditLog {
     private Long entityId;
 
     @Column(columnDefinition = "jsonb")
-    private String delta;
+    @Convert(converter = JsonConverter.class)
+    private Object delta;
 
     private LocalDateTime ts;
 
@@ -61,11 +63,11 @@ public class AuditLog {
         this.entityId = entityId;
     }
 
-    public String getDelta() {
+    public Object getDelta() {
         return delta;
     }
 
-    public void setDelta(String delta) {
+    public void setDelta(Object delta) {
         this.delta = delta;
     }
 

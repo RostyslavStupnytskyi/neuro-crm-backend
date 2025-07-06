@@ -36,6 +36,18 @@ public class ContactController {
         return c != null ? ResponseEntity.ok(c) : ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Contact> update(@PathVariable Long id, @Validated @RequestBody Contact contact) {
+        Contact existing = service.findById(id);
+        if (existing == null) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        contact.setId(id);
+        Contact updated = service.save(contact);
+        return ResponseEntity.ok(updated);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);

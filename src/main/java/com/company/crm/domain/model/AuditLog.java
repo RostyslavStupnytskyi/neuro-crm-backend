@@ -11,15 +11,16 @@ public class AuditLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long actorId;
+    private String actorId;
     private String action;
     private String entityType;
-    private Long entityId;
+    private String entityId;
 
     @Column(columnDefinition = "jsonb")
     private String delta;
 
-    private LocalDateTime ts;
+    @Column(name = "ts")
+    private LocalDateTime timestamp;
 
     public Long getId() {
         return id;
@@ -29,11 +30,11 @@ public class AuditLog {
         this.id = id;
     }
 
-    public Long getActorId() {
+    public String getActorId() {
         return actorId;
     }
 
-    public void setActorId(Long actorId) {
+    public void setActorId(String actorId) {
         this.actorId = actorId;
     }
 
@@ -53,11 +54,11 @@ public class AuditLog {
         this.entityType = entityType;
     }
 
-    public Long getEntityId() {
+    public String getEntityId() {
         return entityId;
     }
 
-    public void setEntityId(Long entityId) {
+    public void setEntityId(String entityId) {
         this.entityId = entityId;
     }
 
@@ -69,11 +70,11 @@ public class AuditLog {
         this.delta = delta;
     }
 
-    public LocalDateTime getTs() {
-        return ts;
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
-    public void setTs(LocalDateTime ts) {
-        this.ts = ts;
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 }

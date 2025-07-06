@@ -20,23 +20,56 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${JWT_JWK_URI:https://example.com/.well-known/jwks.json}
+    filter:
+      dispatcher-types: REQUEST,ASYNC,ERROR
 
 server:
   port: 8080
+  servlet:
+    session:
+      cookie:
+        secure: true
+        http-only: true
+        same-site: strict
+  ssl:
+    enabled: ${SSL_ENABLED:false}
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info
+      base-path: /actuator
+      cors:
+        allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
+        allowed-methods: GET
   endpoint:
     health:
-      show-details: when_authorized
+      show-details: when-authorized
 
 app:
   jwt:
-    expiration: 86400000 # 24 hours in milliseconds
+    secret: ${APP_JWT_SECRET:defaultSecretKeyThatShouldBeOverriddenInProduction}
+    expiration: 3600000 # 1 hour in milliseconds
+    refresh-expiration: 604800000 # 7 days in milliseconds
+  security:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:8080}
+    rate-limit:
+      enabled: true
+      limit: 100
+      duration: 3600 # 1 hour in seconds
+    login:
+      max-attempts: 5
+      lock-duration-minutes: 30
 
 logging:
   level:
     org.springframework.security: INFO
+    com.company.crm.security: DEBUG
+    
+# Security headers
+security:
+  headers:
+    content-security-policy: "default-src 'self'; script-src 'self'; object-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src 'self'"
+    referrer-policy: same-origin
+    permissions-policy: "geolocation=(), microphone=(), camera=()"

@@ -47,3 +47,27 @@ input ContactInput {
 extend type Mutation {
     createContact(input: ContactInput!): Contact
 }
+
+type Delivery {
+    id: ID!
+    shippingCompanyName: String!
+    address: String
+    headquarter: String
+}
+
+extend type Query {
+    deliveries: [Delivery]
+    delivery(id: ID!): Delivery
+}
+
+input DeliveryInput {
+    shippingCompanyName: String!
+    address: String
+    headquarter: String
+}
+
+extend type Mutation {
+    createDelivery(input: DeliveryInput!): Delivery
+    updateDelivery(id: ID!, input: DeliveryInput!): Delivery
+    deleteDelivery(id: ID!): Boolean
+}

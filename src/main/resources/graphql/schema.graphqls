@@ -53,11 +53,41 @@ type Delivery {
     shippingCompanyName: String!
     address: String
     headquarter: String
+    createdAt: String
+    updatedAt: String
+}
+
+type DeliveryResponse {
+    id: ID!
+    shippingCompanyName: String!
+    address: String
+    headquarter: String
+    createdAt: String
+    updatedAt: String
+}
+
+type PageInfo {
+    content: [DeliveryResponse]!
+    pageNumber: Int!
+    pageSize: Int!
+    totalElements: Int!
+    totalPages: Int!
+    last: Boolean!
+    first: Boolean!
+}
+
+input DeliveryFilter {
+    shippingCompanyName: String
+    address: String
+    headquarter: String
 }
 
 extend type Query {
     deliveries: [Delivery]
     delivery(id: ID!): Delivery
+    deliveryDto(id: ID!): DeliveryResponse
+    deliveriesPaged(page: Int, size: Int, sortBy: String, sortDir: String): PageInfo
+    deliveriesFiltered(filter: DeliveryFilter, page: Int, size: Int, sortBy: String, sortDir: String): PageInfo
 }
 
 input DeliveryInput {
@@ -67,7 +97,7 @@ input DeliveryInput {
 }
 
 extend type Mutation {
-    createDelivery(input: DeliveryInput!): Delivery
-    updateDelivery(id: ID!, input: DeliveryInput!): Delivery
+    createDelivery(input: DeliveryInput!): DeliveryResponse
+    updateDelivery(id: ID!, input: DeliveryInput!): DeliveryResponse
     deleteDelivery(id: ID!): Boolean
 }

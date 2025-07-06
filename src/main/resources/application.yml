@@ -9,10 +9,6 @@ spring:
     open-in-view: false
   flyway:
     locations: classpath:db/migration
-  graphql:
-    path: /graphql
-    graphiql:
-      enabled: true
   profiles:
     active: dev
 

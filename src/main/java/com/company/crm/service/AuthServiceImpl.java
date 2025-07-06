@@ -36,20 +36,17 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
     private final LoginAttemptService loginAttemptService;
-    private final SecurityAuditService securityAuditService;
     private final HttpServletRequest request;
 
     @Autowired
     public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
                           PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider,
-                          LoginAttemptService loginAttemptService, SecurityAuditService securityAuditService,
-                          HttpServletRequest request) {
+                          LoginAttemptService loginAttemptService, HttpServletRequest request) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
         this.loginAttemptService = loginAttemptService;
-        this.securityAuditService = securityAuditService;
         this.request = request;
     }
 
@@ -75,18 +72,12 @@ public class AuthServiceImpl implements AuthService {
                 int attemptsLeft = loginAttemptService.getAttemptsLeft(username);
                 logger.warn("Failed login attempt for user: {}, attempts left: {}", username, attemptsLeft);
                 
-                // Audit failed login
-                securityAuditService.auditLogin(username, false);
-                
                 throw new BadCredentialsException("Invalid password. Attempts left: " + attemptsLeft);
             }
 
             // Login successful, reset counters
             loginAttemptService.loginSucceeded(ip);
             loginAttemptService.loginSucceeded(username);
-            
-            // Audit successful login
-            securityAuditService.auditLogin(username, true);
             
             List<String> roles = user.getRoles().stream()
                     .map(Role::getName)
@@ -137,9 +128,6 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
         
         logger.info("New user registered: {}", request.getUsername());
-        
-        // Audit user registration
-        securityAuditService.auditRegistration(request.getUsername());
 
         List<String> roles = user.getRoles().stream()
                 .map(Role::getName)
